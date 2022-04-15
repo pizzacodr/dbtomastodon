@@ -13,4 +13,4 @@ An executable will be created on the target directory.
 
 ## Configuration
 
-To run the binary, you will need a properties file named `dbtomastodon.properties`.  Either on the same directory of the binary or on the user home directory. The properties are listed on the [ConfigFile.java](src/main/java/ConfigFile.java) file.
+To run the binary, you will need a properties file named `dbtomastodon.properties`.  Either on the same directory of the binary or on the user home directory. The properties are listed on the [ConfigFile.java](dbtomastodon/tree/master/src/main/java/ConfigFile.java) file.
