@@ -50,9 +50,9 @@ class DatabaseTest {
         		+ "");
         mastodonCompare.setShareLink("https://www.podbean.com/ew/pb-9rc5w-1120347");
         
-        assertTrue(mastodonItemFromDB.getId() == mastodonCompare.getId());
-        assertTrue(mastodonItemFromDB.getContent().equals(mastodonCompare.getContent()));
-        assertTrue(mastodonItemFromDB.getShareLink().equals(mastodonCompare.getShareLink()));
+        assertEquals(mastodonItemFromDB.getId(), mastodonCompare.getId());
+        assertEquals(mastodonItemFromDB.getContent(), mastodonCompare.getContent());
+        assertEquals(mastodonItemFromDB.getShareLink(), mastodonCompare.getShareLink());
 	}
 
 	@Test
@@ -77,6 +77,6 @@ class DatabaseTest {
     		postedFromDB = rs.getInt("POSTED");
 	    }
     	
-    	assertTrue(postedFromDB == 1);
+    	assertEquals(1, postedFromDB);
 	}
 }

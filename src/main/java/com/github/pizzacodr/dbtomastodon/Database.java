@@ -23,26 +23,28 @@ class Database {
 		
 		ResultSet rs = statement.executeQuery("SELECT ID, CONTENT, SHARELINK FROM MASTODON WHERE POSTED = 0;");
 		
-		while (rs.next()) {
+		if (rs.next()) {
 			
 			MastodonItem mastodonItem = new MastodonItem();
 			
 			int id = rs.getInt(1);
-			logger.debug("ID: " + id);
+			logger.debug("ID: {}", id);
 			mastodonItem.setId(id);
 			
 			String content = rs.getString(2);
-			logger.debug("Content: " + content);
+			logger.debug("Content: {}", content);
 			mastodonItem.setContent(content);
 			
 			String shareLink = rs.getString(3);
-			logger.debug("ShareLink: " + shareLink);
+			logger.debug("ShareLink: {}", shareLink);
 			mastodonItem.setShareLink(shareLink);
 			
 			return mastodonItem;
+        } else {
+        	
+        	logger.debug("nothing was selected from table");
+        	return null;
         }
-		
-		return null;
 	}
 	
 	public void updateMastodon(int id) throws SQLException {

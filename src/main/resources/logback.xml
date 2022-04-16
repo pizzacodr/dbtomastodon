@@ -8,11 +8,7 @@
         </layout>
     </appender>
 
-    <logger name="something" level="debug" additivity="true">
-        <appender-ref ref="CONSOLE"/>
-    </logger>
-
-    <root level="error">
+    <root level="DEBUG">
         <appender-ref ref="CONSOLE"/>
     </root>
 

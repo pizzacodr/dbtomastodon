@@ -9,7 +9,6 @@ import org.springframework.web.reactive.function.client.WebClientResponseExcepti
 
 import com.fasterxml.jackson.core.JsonFactory;
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonMappingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.github.pizzacodr.dbtomastodon.model.StatusResponse;
 
@@ -24,7 +23,7 @@ class MastodonEndpointConnector {
 		webClient = WebClient.create(baseUrl);
 	}
 	
-	public StatusResponse postNewStatus(String content, String shareLink, String bearerToken, String uri) throws JsonMappingException, JsonProcessingException {
+	public StatusResponse postNewStatus(String content, String shareLink, String bearerToken, String uri) throws JsonProcessingException {
 
 		UUID uuid = UUID.randomUUID();
 		
@@ -40,18 +39,16 @@ class MastodonEndpointConnector {
 					.bodyToMono(String.class)
 					.log()
 					.block();
+			
 		} catch (WebClientResponseException e) { 
-			if (e instanceof WebClientResponseException) {
-		         String errorResponse = ((WebClientResponseException)e).getResponseBodyAsString();
-		         logger.error(errorResponse);
-		         throw e;
-		     }
+
+	         logger.error(e.getResponseBodyAsString());
+	         throw e;
 		}
 		
 		JsonFactory jsonFactory = new JsonFactory();
 		ObjectMapper objectMapper = new ObjectMapper(jsonFactory);
-		StatusResponse mastodonStatusResponse = objectMapper.readValue(responseJson, StatusResponse.class);
 		
-		return mastodonStatusResponse;
+		return objectMapper.readValue(responseJson, StatusResponse.class);
 	}
 }
