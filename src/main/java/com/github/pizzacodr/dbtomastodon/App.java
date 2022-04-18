@@ -11,14 +11,14 @@ public class App {
 		
 		ConfigFile configFile = ConfigFactory.create(ConfigFile.class, System.getProperties());
 		
-		Database database = new Database(configFile.dbFileLocation());
+		Database database = new Database(configFile.dbFileLocation(), configFile.tableName());
 		MastodonItem mastodonItem = database.selectNewFromDBIfNotPosted();
 		
 		if (mastodonItem != null) {
 			MastodonEndpointConnector mastodonEndpointConnector = new MastodonEndpointConnector(configFile.baseUrl());
 			mastodonEndpointConnector.postNewStatus(mastodonItem.getContent(), mastodonItem.getShareLink(), 
 					configFile.bearerToken(), configFile.uri());
-			database.updateMastodon(mastodonItem.getId());
+			database.updateTable(mastodonItem.getId());
 		}
 	}
 }

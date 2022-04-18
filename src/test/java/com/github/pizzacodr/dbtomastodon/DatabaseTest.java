@@ -25,7 +25,7 @@ class DatabaseTest {
 	void testDatabase() {
 		assertThrows(SQLException.class,
                 ()->{
-                new Database("wrongPath");
+                new Database("wrongPath", "MASTODON");
                 });
 	}
 
@@ -38,7 +38,7 @@ class DatabaseTest {
         Files.copy(sourceFile.toPath(), destFile.toPath());
         
         String connectionString = "jdbc:sqlite:" + destFile.getAbsolutePath();
-        Database database = new Database(connectionString);
+        Database database = new Database(connectionString, "MASTODON");
         
         MastodonItem mastodonItemFromDB = database.selectNewFromDBIfNotPosted();
         
@@ -64,9 +64,9 @@ class DatabaseTest {
         Files.copy(sourceFile.toPath(), destFile.toPath());
         
         String connectionString = "jdbc:sqlite:" + destFile.getAbsolutePath();
-        Database database = new Database(connectionString);
+        Database database = new Database(connectionString, "MASTODON");
         
-        database.updateMastodon(4);
+        database.updateTable(4);
         
         Connection connection = DriverManager.getConnection(connectionString);
     	Statement statement = connection.createStatement();

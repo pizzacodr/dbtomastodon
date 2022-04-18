@@ -12,16 +12,18 @@ import ch.qos.logback.classic.Logger;
 class Database {
 	private static Logger logger = (Logger) LoggerFactory.getLogger(Database.class);
 	private Connection connection;
-	Statement statement;
+	private Statement statement;
+	private String tableName;
 	
-	public Database(String dbFileLocation) throws SQLException {
+	public Database(String dbFileLocation, String tableName) throws SQLException {
 		connection = DriverManager.getConnection(dbFileLocation);
 		statement = connection.createStatement();
+		this.tableName = tableName;
 	}
 	
 	public MastodonItem selectNewFromDBIfNotPosted() throws SQLException {
 		
-		ResultSet rs = statement.executeQuery("SELECT ID, CONTENT, SHARELINK FROM MASTODON WHERE POSTED = 0;");
+		ResultSet rs = statement.executeQuery("SELECT ID, CONTENT, SHARELINK FROM " + tableName + " WHERE POSTED = 0;");
 		
 		if (rs.next()) {
 			
@@ -47,8 +49,8 @@ class Database {
         }
 	}
 	
-	public void updateMastodon(int id) throws SQLException {
+	public void updateTable (int id) throws SQLException {
 		
-		statement.executeUpdate("UPDATE MASTODON SET POSTED = 1 WHERE ID = " + id + ";");
+		statement.executeUpdate("UPDATE " + tableName + " SET POSTED = 1 WHERE ID = " + id + ";");
 	}
 }

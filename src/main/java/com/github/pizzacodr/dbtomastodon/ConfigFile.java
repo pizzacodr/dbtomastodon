@@ -12,4 +12,5 @@ interface ConfigFile extends Config {
 	String dbFileLocation();
 	String baseUrl();
 	String uri();
+	String tableName();
 }
