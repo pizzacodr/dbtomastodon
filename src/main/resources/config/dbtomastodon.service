@@ -1,0 +1,12 @@
+[Unit]
+Description=mastodon dbtomastodon
+
+[Service]
+ExecStart=/usr/bin/java -Xms128m -Xmx256m -jar /opt/socialcrossposting/mastodon/dbtomastodon-0.0.1-SNAPSHOT-jar-with-dependencies.jar
+StandardOutput=file:/var/log/mastodon-dbtomastodon.out.txt
+StandardError=file:/var/log/mastodon-dbtomastodon.err.txt
+Type=simple
+WorkingDirectory=/opt/socialcrossposting/mastodon
+
+[Install]
+WantedBy=multi-user.target

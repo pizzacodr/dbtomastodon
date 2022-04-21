@@ -1,0 +1,11 @@
+[Unit]
+Description=Daily Mastodon dbtomastodon Timer
+Requires=mastodon-dbtomastodon.service
+
+[Timer]
+Unit=mastodon-dbtomastodon.service
+OnCalendar=*-*-* 14:30:00 America/New_York
+Persistent=true
+
+[Install]
+WantedBy=timers.target
