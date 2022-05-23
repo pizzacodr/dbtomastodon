@@ -13,4 +13,9 @@ interface ConfigFile extends Config {
 	String baseUrl();
 	String uri();
 	String tableName();
+	String whichService();
+	String twitterAPIKey();
+	String twitterAPIKeySecret();
+	String twitterAccessToken();
+	String twitterAccessTokenSecret();
 }

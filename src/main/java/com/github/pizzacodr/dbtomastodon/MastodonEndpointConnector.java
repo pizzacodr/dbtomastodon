@@ -7,48 +7,60 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
-import com.fasterxml.jackson.core.JsonFactory;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.github.pizzacodr.dbtomastodon.model.StatusResponse;
-
 import ch.qos.logback.classic.Logger;
+import twitter4j.Twitter;
+import twitter4j.TwitterException;
+import twitter4j.TwitterFactory;
+import twitter4j.conf.ConfigurationBuilder;
 
 class MastodonEndpointConnector {
 	
 	private static Logger logger = (Logger) LoggerFactory.getLogger(MastodonEndpointConnector.class);
-	private WebClient webClient;
+	private ConfigFile configFile;
 	
-	MastodonEndpointConnector(String baseUrl) {
-		webClient = WebClient.create(baseUrl);
+	MastodonEndpointConnector(ConfigFile configFile) {
+		this.configFile = configFile;
 	}
 	
-	public StatusResponse postNewStatus(String content, String shareLink, String bearerToken, String uri) throws JsonProcessingException {
-
-		UUID uuid = UUID.randomUUID();
+	public void postNewStatus(String content, String shareLink) throws TwitterException {
 		
-		String responseJson = "";
+		WebClient webClient = WebClient.create(configFile.baseUrl());
 		
 		try {
-			responseJson = webClient.post()
-					.uri(uri)
-					.header("Idempotency-Key", uuid.toString())
-					.header("Authorization", "Bearer " + bearerToken)
-					.body(BodyInserters.fromFormData("status", content +"\n" + shareLink))
-					.retrieve()
-					.bodyToMono(String.class)
-					.log()
-					.block();
+			if (configFile.whichService().equalsIgnoreCase("Mastodon")) {
+				
+				UUID uuid = UUID.randomUUID();
+				
+				webClient.post()
+						.uri(configFile.uri())
+						.header("Idempotency-Key", uuid.toString())
+						.header("Authorization", "Bearer " + configFile.bearerToken())
+						.body(BodyInserters.fromFormData("status", content +"\n" + shareLink))
+						.retrieve()
+						.bodyToMono(String.class)
+						.log()
+						.block();
+			} else if (configFile.whichService().equalsIgnoreCase("Twitter")) {
+				
+				ConfigurationBuilder cb = new ConfigurationBuilder();
+			    cb.setDebugEnabled(true)
+			            .setOAuthConsumerKey(configFile.twitterAPIKey())
+			            .setOAuthConsumerSecret(configFile.twitterAPIKeySecret())
+			            .setOAuthAccessToken(configFile.twitterAccessToken())
+			            .setOAuthAccessTokenSecret(configFile.twitterAccessTokenSecret()); 
+			    TwitterFactory tf = new TwitterFactory(cb.build());
+			    Twitter twitter = tf.getInstance();
+			    twitter.updateStatus(content +"\n" + shareLink);
+			}
 			
 		} catch (WebClientResponseException e) { 
 
 	         logger.error(e.getResponseBodyAsString());
 	         throw e;
-		}
-		
-		JsonFactory jsonFactory = new JsonFactory();
-		ObjectMapper objectMapper = new ObjectMapper(jsonFactory);
-		
-		return objectMapper.readValue(responseJson, StatusResponse.class);
+		} catch (TwitterException e) {
+			
+	    	logger.error(e.getErrorMessage());
+	    	throw e;
+	    } 
 	}
 }
