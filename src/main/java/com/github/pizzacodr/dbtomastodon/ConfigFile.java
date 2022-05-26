@@ -14,8 +14,10 @@ interface ConfigFile extends Config {
 	String uri();
 	String tableName();
 	String whichService();
-	String twitterAPIKey();
-	String twitterAPIKeySecret();
-	String twitterAccessToken();
-	String twitterAccessTokenSecret();
+	String consumerKey();
+	String consumerSecret();
+	String accessToken();
+	String accessTokenSecret();
+	String tumblrJournalName();
+	String tumblrLinkTitle();
 }

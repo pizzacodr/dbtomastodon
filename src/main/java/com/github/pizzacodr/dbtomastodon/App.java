@@ -1,17 +1,13 @@
 package com.github.pizzacodr.dbtomastodon;
 
-import java.io.IOException;
-import java.net.URISyntaxException;
 import java.sql.SQLException;
 import org.aeonbits.owner.ConfigFactory;
 import com.github.pizzacodr.dbtomastodon.model.MastodonItem;
-import com.nimbusds.oauth2.sdk.ParseException;
-
 import twitter4j.TwitterException;
 
 public class App {
 
-	public static void main(String[] args) throws IOException, SQLException, ParseException, URISyntaxException, TwitterException {
+	public static void main(String[] args) throws SQLException, TwitterException, IllegalAccessException, InstantiationException {
 		
 		ConfigFile configFile = ConfigFactory.create(ConfigFile.class, System.getProperties());
 		
