@@ -66,7 +66,7 @@ class MastodonEndpointConnector {
 				LinkPost linkPost = client.newPost(configFile.tumblrJournalName(), LinkPost.class);
 				linkPost.setTitle(configFile.tumblrLinkTitle());
 				
-				String contentReplaced = content.replace("\n", " - ");
+				String contentReplaced = content.replaceFirst("\n", " - ");
 				linkPost.setDescription(contentReplaced);
 				linkPost.setLinkUrl(shareLink);
 				linkPost.save();
