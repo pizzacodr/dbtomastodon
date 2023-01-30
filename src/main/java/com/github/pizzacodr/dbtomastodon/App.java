@@ -3,11 +3,13 @@ package com.github.pizzacodr.dbtomastodon;
 import java.sql.SQLException;
 import org.aeonbits.owner.ConfigFactory;
 import com.github.pizzacodr.dbtomastodon.model.MastodonItem;
+import com.google.jplurk_oauth.skeleton.RequestException;
+
 import twitter4j.TwitterException;
 
 public class App {
 
-	public static void main(String[] args) throws SQLException, TwitterException, IllegalAccessException, InstantiationException {
+	public static void main(String[] args) throws SQLException, TwitterException, IllegalAccessException, InstantiationException, RequestException {
 		
 		ConfigFile configFile = ConfigFactory.create(ConfigFile.class, System.getProperties());
 		

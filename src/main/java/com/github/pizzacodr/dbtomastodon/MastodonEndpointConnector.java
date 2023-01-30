@@ -7,6 +7,10 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import org.springframework.web.reactive.function.client.WebClientResponseException;
 
+import com.google.jplurk_oauth.Qualifier;
+import com.google.jplurk_oauth.module.Timeline;
+import com.google.jplurk_oauth.skeleton.PlurkOAuth;
+import com.google.jplurk_oauth.skeleton.RequestException;
 import com.tumblr.jumblr.JumblrClient;
 import com.tumblr.jumblr.exceptions.JumblrException;
 import com.tumblr.jumblr.types.LinkPost;
@@ -25,7 +29,7 @@ class MastodonEndpointConnector {
 		this.configFile = configFile;
 	}
 
-	public void postNewStatus(String content, String shareLink) throws TwitterException, IllegalAccessException, InstantiationException {
+	public void postNewStatus(String content, String shareLink) throws TwitterException, IllegalAccessException, InstantiationException, RequestException {
 
 		try {
 
@@ -70,6 +74,14 @@ class MastodonEndpointConnector {
 				linkPost.setDescription(contentReplaced);
 				linkPost.setLinkUrl(shareLink);
 				linkPost.save();
+				
+			} else if (configFile.whichService().equalsIgnoreCase("Plurk")) {
+				
+				PlurkOAuth auth = new PlurkOAuth(
+						configFile.consumerKey(), configFile.consumerSecret(), 
+						configFile.accessToken(), configFile.accessTokenSecret());
+				
+				auth.using(Timeline.class).plurkAdd(content + "\n" + shareLink, Qualifier.SAYS);
 			}
 
 		} catch (WebClientResponseException e) {

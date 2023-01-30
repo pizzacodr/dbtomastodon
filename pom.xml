@@ -20,6 +20,14 @@
 		<junit.version>5.8.2</junit.version>
 		<slf4f.version>1.7.36</slf4f.version>
 	</properties>
+	
+	<repositories>
+	    <repository>
+	        <id>jcenter</id>
+	        <name>jcenter</name>
+	        <url>https://jcenter.bintray.com</url>
+	    </repository>
+	</repositories>
 
 	<dependencies>
 		<dependency>
@@ -84,6 +92,11 @@
 			<groupId>com.tumblr</groupId>
 			<artifactId>jumblr</artifactId>
 			<version>0.0.13</version>
+		</dependency>
+		<dependency>
+		    <groupId>com.google.jplurk</groupId>
+		    <artifactId>jplurk-oauth</artifactId>
+		    <version>2.0.22</version>
 		</dependency>
 	</dependencies>
 
